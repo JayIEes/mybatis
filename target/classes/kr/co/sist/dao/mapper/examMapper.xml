@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="kr.co.sist.dao.examMapper"> <!-- 패키지명과는 전혀 상관 없음. -->
+
+	<!-- Mytab 테이블에 레코드 추가 -->
+  <insert id="insertMyTab" parameterType="kr.co.sist.vo.MyTabVO">
+	insert into my_tab(id,name,email,input_date,age)
+	values(#{id},#{name},#{email},sysdate,#{age})
+  </insert>
+  
+  
+  
+  <!-- 아이디와 이메일을 가지고 이름과 나이를 변경 -->
+  <update id="updateMyTab" parameterType="kr.co.sist.vo.MyTabVO">
+<!-- 괄호 이런 특수문자들 자유롭게 쓸수있는 Character Data : 파싱하지 않는 데이터 -->
+  <![CDATA[ 
+  	update my_tab
+  	set		name=#{name}, age=#{age}
+  	where id=#{id} and email=#{email}
+  ]]>
+  </update>
+  
+  
+  <!-- 아이디를 입력받아 삭제 : 값이 하나인 경우 parameterType="단일형"을 설정할 수 있다.-->
+  <delete id="deleteMyTab" parameterType="String">
+  	delete from my_tab
+  	where id=#{id}
+  </delete>
+  
+  
+  
+  <!-- 한행 조회 : my_tab 테이블에서 아이디와 이름에 해당하는 레코드의 이름, 이메일, 입력일, 나이-->
+  <select id="selectMyTab" resultType="kr.co.sist.domain.MyTabDomain" parameterType="kr.co.sist.vo.MyTabVO">
+	select name, email, to_char(input_date,'MM-dd-yyyy') as input_date, age <!-- as 생략 가능 -->
+	from my_tab
+	where id=#{id} and name=#{name}
+  </select>
+  
+  
+  <!-- cp_emp4 테이블에서 입력되는 job과 일치하는 사원번호, 사원명, 직무, 연봉, 보너스를 조회 -->
+  <select id="selectCpEmp4" resultType="kr.co.sist.domain.CpEmp4Domain" parameterType="String">
+	select empno,ename,job,sal,comm
+	from cp_emp4
+	where job=#{job}
+  </select>
+  
+  
+</mapper>
+
+
+
+
